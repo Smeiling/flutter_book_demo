@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:lovebooks/common/DialogUtils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// 注册页面
 class RegisterPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {

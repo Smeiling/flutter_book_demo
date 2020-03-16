@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lovebooks/pages/BookStore.dart';
 import 'package:lovebooks/pages/LoginPage.dart';
+import 'package:lovebooks/pages/MyInfoPage.dart';
+import 'package:lovebooks/pages/RegisterPage.dart';
 
-void main() => runApp(LoginPage());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -22,6 +26,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        "login_page": (context) => LoginPage(),
+        "register_page": (context) => RegisterPage()
+      },
     );
   }
 }
@@ -44,18 +52,62 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  int selectedIndex = 0;
+  TabController controller;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  final tabTextStyleNormal = new TextStyle(color: Colors.amberAccent);
+  final tabTextStyleSelected = new TextStyle(color: Colors.amber);
+
+  var tagImages;
+  var bodyStack;
+
+  var appBarTitles = ['首页', '我的'];
+
+  Image getTabImage(path) {
+    return new Image.asset(path, width: 20.0, height: 20.0);
+  }
+
+  Image getTabIcon(int curIndex) {
+    if (curIndex == selectedIndex) {
+      return tagImages[curIndex][0];
+    } else {
+      return tagImages[curIndex][1];
+    }
+  }
+
+  Text getTabTitle(int curIndex) {
+    return new Text(appBarTitles[curIndex],
+        style: TextStyle(fontSize: 10.0, color: Colors.amberAccent));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller = TabController(vsync: this, length: 2);
+    controller.addListener(() {
+      setState(() {
+        selectedIndex = controller.index;
+      });
     });
+  }
+
+  void initData() {
+    tagImages = [
+      [
+        getTabImage('images/icon_home.png'),
+        getTabImage('image/icon_home_default.png')
+      ],
+      [
+        getTabImage('images/icon_my.png'),
+        getTabImage('images/icon_my_default.png')
+      ]
+    ];
+    bodyStack = new IndexedStack(
+      children: <Widget>[new BookStore(), new MyInfoPage()],
+      index: selectedIndex,
+    );
   }
 
   @override
@@ -66,47 +118,33 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    initData();
+    return new MaterialApp(
+        theme: new ThemeData(primaryColor: Colors.black),
+        home: new Scaffold(
+
+          body: TabBarView(
+            controller: controller,
+            physics: NeverScrollableScrollPhysics(),
+            children: <Widget>[new BookStore(), new MyInfoPage()],
+          ),
+          bottomNavigationBar: new CupertinoTabBar(
+            backgroundColor: const Color(0xffeae9e7),
+            items: [
+              new BottomNavigationBarItem(
+                  icon: getTabIcon(0), title: getTabTitle(0)),
+              new BottomNavigationBarItem(
+                  icon: getTabIcon(1), title: getTabTitle(1)),
+            ],
+
+            currentIndex: selectedIndex,
+            onTap: (index) {
+              setState(() {
+                controller.index = index;
+                selectedIndex = index;
+              });
+            },
+          ),
+        ));
   }
 }

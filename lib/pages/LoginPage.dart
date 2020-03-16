@@ -3,6 +3,7 @@ import 'package:lovebooks/common/DialogUtils.dart';
 import 'package:lovebooks/pages/RegisterPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// 登录页面
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
