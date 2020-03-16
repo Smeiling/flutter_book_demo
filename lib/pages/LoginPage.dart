@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lovebooks/common/DialogUtils.dart';
+import 'package:lovebooks/main.dart';
 import 'package:lovebooks/pages/RegisterPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,12 +35,7 @@ class LoginPageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('登录'),
-        leading: IconButton(
-            icon: BackButtonIcon(),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+        title: Text('登录', textAlign: TextAlign.center),
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 20.0),
@@ -121,7 +117,7 @@ class LoginPageWidget extends StatelessWidget {
     }
     var sp = await SharedPreferences.getInstance();
     if (sp.get(account) == password) {
-      DialogUtils.show(context, '提示', '登录成功');
+      sp.setString("current_login_user", account);
     } else {
       DialogUtils.show(context, '提示', '登录失败，用户名或密码错误');
     }

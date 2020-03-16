@@ -4,6 +4,7 @@ import 'package:lovebooks/pages/BookStore.dart';
 import 'package:lovebooks/pages/LoginPage.dart';
 import 'package:lovebooks/pages/MyInfoPage.dart';
 import 'package:lovebooks/pages/RegisterPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -83,8 +84,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+//    checkLoginStatus();
     controller = TabController(vsync: this, length: 2);
     controller.addListener(() {
       setState(() {
@@ -122,7 +123,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return new MaterialApp(
         theme: new ThemeData(primaryColor: Colors.black),
         home: new Scaffold(
-
           body: TabBarView(
             controller: controller,
             physics: NeverScrollableScrollPhysics(),
@@ -136,7 +136,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               new BottomNavigationBarItem(
                   icon: getTabIcon(1), title: getTabTitle(1)),
             ],
-
             currentIndex: selectedIndex,
             onTap: (index) {
               setState(() {
@@ -146,5 +145,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             },
           ),
         ));
+  }
+
+  Future<Null> checkLoginStatus() async {
+    var sp = await SharedPreferences.getInstance();
+    if (sp.get("current_login_user") == null ||
+        sp.get("current_login_user") == '') {
+      print('not login');
+      Navigator.pushNamed(context, "login_page");
+    } else {
+      print('logined');
+      return;
+    }
   }
 }
