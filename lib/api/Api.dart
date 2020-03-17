@@ -4,4 +4,5 @@ class Api{
   static final String HOST = 'http://api.douban.com/v2';
   static final String IN_THEATER = '$HOST/movie/in_theaters';
   static final String TOP250 = '$HOST/movie/top250';
+  static final String DETAIL = '$HOST/movie/subject/';
 }

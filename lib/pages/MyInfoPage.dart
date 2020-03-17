@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lovebooks/pages/LoginPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyInfoPage extends StatefulWidget {
   @override
@@ -32,18 +33,24 @@ class _MyInfoPageState extends State<MyInfoPage> {
             GestureDetector(
               onTap: () {
 //                Navigator.pushNamed(context, "login_page");
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => new LoginPage()));
+                logout();
               },
               child: Text(
                 '退出登录',
                 style: TextStyle(
-                    backgroundColor: Colors.amberAccent, color: Colors.white),
+                    backgroundColor: Colors.cyan, color: Colors.white),
               ),
             )
           ],
         ),
       ),
     );
+  }
+
+  void logout() async {
+    var sp = await SharedPreferences.getInstance();
+    sp.setString("current_login_user", "");
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => new LoginPage()));
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lovebooks/api/Api.dart';
 import 'package:lovebooks/api/NetUtils.dart';
+import 'package:lovebooks/pages/MovieDetailPage.dart';
 
 class BookList extends StatefulWidget {
   final String bookType;
@@ -119,7 +120,11 @@ class _NewListState extends State<BookList> with AutomaticKeepAliveClientMixin {
   Widget bookRow(i) {
     var itemData = listData[i];
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return new MovieDetailPage(itemData['id'], itemData['title']);
+        }));
+      },
       child: Container(
         child: Column(
           children: <Widget>[

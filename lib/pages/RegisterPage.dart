@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.amber),
+      theme: ThemeData(primaryColor: Colors.cyan),
       home: Scaffold(
         appBar: AppBar(
           title: Text('注册'),
@@ -114,10 +114,11 @@ class _RegisterPageState extends State<RegisterPage> {
           Container(
             margin: EdgeInsets.only(top: 30.0),
             child: MaterialButton(
+              minWidth: 120.0,
+              height: 50.0,
               child: Text(
                 '立即注册',
-                style: TextStyle(
-                    fontSize: 20.0, backgroundColor: Colors.amberAccent),
+                style: TextStyle(fontSize: 20.0, backgroundColor: Colors.cyan),
                 textAlign: TextAlign.center,
               ),
               onPressed: () {

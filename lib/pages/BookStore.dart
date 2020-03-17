@@ -28,16 +28,16 @@ class _BookStoreState extends State<BookStore>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: Colors.cyan,
         title: new TabBar(
-          labelColor: Colors.yellow,
-          unselectedLabelColor: Colors.white,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.grey,
           indicatorWeight: 2.0,
           controller: tabController,
           tabs: myTabs.map((item) {
             return new Tab(text: item.text);
           }).toList(),
-          indicatorColor: Colors.yellow,
+          indicatorColor: Colors.lightBlueAccent,
           isScrollable: true,
         ),
       ),

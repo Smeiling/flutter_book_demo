@@ -1,12 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lovebooks/pages/BookStore.dart';
 import 'package:lovebooks/pages/LoginPage.dart';
 import 'package:lovebooks/pages/MyInfoPage.dart';
 import 'package:lovebooks/pages/RegisterPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+  // 沉浸式状态栏
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle style = SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light);
+    SystemChrome.setSystemUIOverlayStyle(style);
+  }
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -24,7 +36,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.cyan,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
       routes: {
@@ -57,8 +69,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   int selectedIndex = 0;
   TabController controller;
 
-  final tabTextStyleNormal = new TextStyle(color: Colors.amberAccent);
-  final tabTextStyleSelected = new TextStyle(color: Colors.amber);
+  final tabTextStyleNormal = new TextStyle(color: Colors.cyan);
+  final tabTextStyleSelected = new TextStyle(color: Colors.lightBlueAccent);
 
   var tagImages;
   var bodyStack;
@@ -79,13 +91,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   Text getTabTitle(int curIndex) {
     return new Text(appBarTitles[curIndex],
-        style: TextStyle(fontSize: 10.0, color: Colors.amberAccent));
+        style: TextStyle(fontSize: 10.0, color: Colors.lightBlueAccent));
   }
 
   @override
   void initState() {
     super.initState();
-//    checkLoginStatus();
+    checkLoginStatus();
     controller = TabController(vsync: this, length: 2);
     controller.addListener(() {
       setState(() {
@@ -121,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     // than having to individually change instances of widgets.
     initData();
     return new MaterialApp(
-        theme: new ThemeData(primaryColor: Colors.black),
+        theme: new ThemeData(primaryColor: Colors.cyan),
         home: new Scaffold(
           body: TabBarView(
             controller: controller,

@@ -16,7 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.black), home: LoginPageWidget());
+        theme: ThemeData(primaryColor: Colors.cyan),
+        home: LoginPageWidget(context));
   }
 }
 
@@ -31,79 +32,87 @@ class LoginPageWidget extends StatelessWidget {
   TextEditingController accountController = new TextEditingController();
   TextEditingController passController = new TextEditingController();
 
+  BuildContext pageContext;
+
+  LoginPageWidget(this.pageContext);
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: Text('登录', textAlign: TextAlign.center),
-      ),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 20.0),
-        child: Column(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.center,
-              child: Text('您好！', style: TextStyle(fontSize: 30.0)),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text('欢迎来到登录界面', style: TextStyle(fontSize: 16.0)),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 30.0),
-              child: TextField(
-                controller: accountController,
-                keyboardType: TextInputType.phone,
-                // 设置hint
-                decoration: InputDecoration(hintText: '请输入11位手机号码'),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 30.0),
-              child: TextField(
-                controller: passController,
-                // 是否以密码形式显示（*）
-                obscureText: true,
-                decoration: InputDecoration(hintText: '请输入6位密码'),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => new RegisterPage()));
-              },
-              child: Container(
-                margin: EdgeInsets.only(top: 10.0),
-                alignment: Alignment.topLeft,
-                child: Text('没有账号，注册一个吧～',
-                    style: TextStyle(
-                        // 下划线
-                        decoration: TextDecoration.underline,
-                        color: Colors.blue)),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 40.0),
-              child: MaterialButton(
-                child: Text(
-                  '登录',
-                  style: TextStyle(fontSize: 24.0, color: Colors.blue),
-                  textAlign: TextAlign.center,
+    return new WillPopScope(
+        child: new Scaffold(
+          appBar: AppBar(
+            title: Text('登录', textAlign: TextAlign.center),
+          ),
+          body: Container(
+            margin: EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 20.0),
+            child: Column(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.center,
+                  child: Text('您好！', style: TextStyle(fontSize: 30.0)),
                 ),
-                // 按钮点击事件
-                onPressed: () {
-                  _str_account = accountController.text;
-                  _str_pass = passController.text;
-                  localLogin(context, _str_account, _str_pass);
-                },
-              ),
-            )
-          ],
+                Align(
+                  alignment: Alignment.center,
+                  child: Text('欢迎来到登录界面', style: TextStyle(fontSize: 16.0)),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 30.0),
+                  child: TextField(
+                    controller: accountController,
+                    keyboardType: TextInputType.phone,
+                    // 设置hint
+                    decoration: InputDecoration(hintText: '请输入11位手机号码'),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 30.0),
+                  child: TextField(
+                    controller: passController,
+                    // 是否以密码形式显示（*）
+                    obscureText: true,
+                    decoration: InputDecoration(hintText: '请输入6位密码'),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => new RegisterPage()));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10.0),
+                    alignment: Alignment.topLeft,
+                    child: Text('没有账号，注册一个吧～',
+                        style: TextStyle(
+                            // 下划线
+                            decoration: TextDecoration.underline,
+                            color: Colors.blue)),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 40.0),
+                  child: MaterialButton(
+                    child: Text(
+                      '登录',
+                      style: TextStyle(fontSize: 24.0, color: Colors.cyan),
+                      textAlign: TextAlign.center,
+                    ),
+                    // 按钮点击事件
+                    onPressed: () {
+                      _str_account = accountController.text;
+                      _str_pass = passController.text;
+                      localLogin(context, _str_account, _str_pass);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+        onWillPop: () async {
+          return false;
+        });
   }
 
   void localLogin(BuildContext context, String account, String password) async {
@@ -118,6 +127,7 @@ class LoginPageWidget extends StatelessWidget {
     var sp = await SharedPreferences.getInstance();
     if (sp.get(account) == password) {
       sp.setString("current_login_user", account);
+      Navigator.pop(pageContext);
     } else {
       DialogUtils.show(context, '提示', '登录失败，用户名或密码错误');
     }
